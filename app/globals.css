@@ -1,26 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base:        #f5f4f0;
+  --bg-surface:     #faf9f6;
+  --bg-card:        #ffffff;
+  --bg-subtle:      #eeecea;
+  --border:         #e2dfd9;
+  --border-strong:  #ccc9c1;
+
+  --text-primary:   #1c1917;
+  --text-secondary: #57534e;
+  --text-muted:     #a8a29e;
+
+  --accent:         #6d28d9;
+  --accent-light:   #ede9fe;
+  --accent-mid:     #8b5cf6;
+
+  --teal:           #0d9488;
+  --teal-light:     #ccfbf1;
+
+  --amber:          #d97706;
+  --amber-light:    #fef3c7;
+
+  --rose:           #e11d48;
+  --rose-light:     #ffe4e6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b5b0a8;
+}
+
+.glass-panel {
+  background: rgba(250, 249, 246, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 16px rgba(109, 40, 217, 0.06), 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.glass-header {
+  background: rgba(250, 249, 246, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 223, 217, 0.4) 0%,
+    rgba(214, 211, 205, 0.7) 50%,
+    rgba(226, 223, 217, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite linear;
+}
+
+.glow-violet {
+  box-shadow: 0 0 24px -4px rgba(109, 40, 217, 0.18);
+}
+
+.glow-teal {
+  box-shadow: 0 0 24px -4px rgba(13, 148, 136, 0.18);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04);
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--accent);
 }

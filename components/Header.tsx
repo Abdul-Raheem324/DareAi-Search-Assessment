@@ -34,7 +34,7 @@ export function Header({
   };
 
   return (
-    <header className="sticky top-0 z-30 glass-header px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 bg-[#faf9f6]/95 backdrop-blur-md border-b border-stone-200/90 shadow-2xs px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
       <div className="flex items-center gap-3.5">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 to-violet-400 text-white shadow-lg shadow-violet-500/25">
           <Database className="h-5 w-5" />
