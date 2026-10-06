@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useCallback, useTransition, useMemo } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import {
   FilterParams,
   OrderStatus,
@@ -33,7 +33,24 @@ export function useUrlState() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [, startTransition] = useTransition();
+
+  const urlSelectedId = searchParams.get('selectedId') || null;
+  const [prevUrlSelectedId, setPrevUrlSelectedId] = useState<string | null>(urlSelectedId);
+  const [selectedId, setSelectedIdState] = useState<string | null>(urlSelectedId);
+
+  if (urlSelectedId !== prevUrlSelectedId) {
+    setPrevUrlSelectedId(urlSelectedId);
+    setSelectedIdState(urlSelectedId);
+  }
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const sp = new URLSearchParams(window.location.search);
+      setSelectedIdState(sp.get('selectedId') || null);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const statusRaw = searchParams.getAll('status');
   const statusKey = statusRaw.join(',');
@@ -65,7 +82,6 @@ export function useUrlState() {
     const pageSize = searchParams.has('pageSize')
       ? parseInt(searchParams.get('pageSize')!, 10)
       : DEFAULT_PAGE_SIZE;
-    const selectedId = searchParams.get('selectedId') || null;
 
     return {
       q,
@@ -81,7 +97,7 @@ export function useUrlState() {
       pageSize: isNaN(pageSize) || pageSize < 1 ? DEFAULT_PAGE_SIZE : pageSize,
       selectedId,
     };
-  }, [searchParams, status, priority, region, category]);
+  }, [searchParams, status, priority, region, category, selectedId]);
 
   const serializeParams = useCallback((params: FilterParams): string => {
     const sp = new URLSearchParams();
@@ -116,13 +132,11 @@ export function useUrlState() {
       const query = serializeParams(next);
       const url = `${pathname}${query}`;
 
-      startTransition(() => {
-        if (pushHistory) {
-          router.push(url, { scroll: false });
-        } else {
-          router.replace(url, { scroll: false });
-        }
-      });
+      if (pushHistory) {
+        router.push(url, { scroll: false });
+      } else {
+        router.replace(url, { scroll: false });
+      }
     },
     [currentParams, pathname, router, serializeParams]
   );
@@ -224,14 +238,16 @@ export function useUrlState() {
   );
 
   const setSelectedId = useCallback(
-    (selectedId: string | null) => {
+    (newSelectedId: string | null) => {
+      setSelectedIdState(newSelectedId);
       // Using pushHistory so pressing browser "Back" smoothly closes the drawer!
-      updateUrl((prev) => ({ ...prev, selectedId }), true);
+      updateUrl((prev) => ({ ...prev, selectedId: newSelectedId }), true);
     },
     [updateUrl]
   );
 
   const resetFilters = useCallback(() => {
+    setSelectedIdState(null);
     updateUrl(() => ({ ...DEFAULT_PARAMS }));
   }, [updateUrl]);
 

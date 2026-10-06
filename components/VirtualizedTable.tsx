@@ -49,7 +49,7 @@ export function VirtualizedTable({
   }, [selectedId, orders]);
 
   useEffect(() => {
-    if (focusedIndex >= 0) {
+    if (focusedIndex >= 0 && !selectedId) {
       const timer = setTimeout(() => {
         const el = parentRef.current?.querySelector<HTMLDivElement>(
           `[data-row-index="${focusedIndex}"]`
@@ -60,7 +60,7 @@ export function VirtualizedTable({
       }, 16);
       return () => clearTimeout(timer);
     }
-  }, [focusedIndex]);
+  }, [focusedIndex, selectedId]);
 
   const navigateRow = useCallback(
     (nextIdx: number) => {
@@ -253,9 +253,9 @@ export function VirtualizedTable({
             role="table"
             aria-label="Enterprise Orders Dataset"
             tabIndex={0}
-            onFocus={() => {
-              if (focusedIndex === -1 && orders.length > 0) {
-                navigateRow(0);
+            onFocus={(e) => {
+              if (e.target === parentRef.current && focusedIndex === -1 && orders.length > 0) {
+                setFocusedIndex(0);
               }
             }}
             onKeyDown={handleTableKeyDown}

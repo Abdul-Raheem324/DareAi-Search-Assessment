@@ -29,24 +29,30 @@ interface DetailDrawerProps {
 }
 
 export function DetailDrawer({ orderId, onClose, cachedOrder }: DetailDrawerProps) {
-  const [order, setOrder] = useState<Order | null>(cachedOrder || null);
-  const [loading, setLoading] = useState<boolean>(!cachedOrder && !!orderId);
+  const [fetchedOrder, setFetchedOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedTracking, setCopiedTracking] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
+
+  const isCachedMatch =
+    !!cachedOrder && (cachedOrder.id === orderId || cachedOrder.orderNumber === orderId);
+  const order = isCachedMatch ? cachedOrder : fetchedOrder;
 
   const statusConfig = order ? STATUS_BADGES[order.status] : null;
   const priorityConfig = order ? PRIORITY_BADGES[order.priority] : null;
 
   useEffect(() => {
     if (!orderId) {
-      setOrder(null);
+      setFetchedOrder(null);
+      setLoading(false);
+      setError(null);
       return;
     }
 
     if (cachedOrder && (cachedOrder.id === orderId || cachedOrder.orderNumber === orderId)) {
-      setOrder(cachedOrder);
       setLoading(false);
+      setError(null);
       return;
     }
 
@@ -58,7 +64,7 @@ export function DetailDrawer({ orderId, onClose, cachedOrder }: DetailDrawerProp
     fetchOrderById(orderId, controller.signal)
       .then((data) => {
         if (!isCancelled) {
-          setOrder(data);
+          setFetchedOrder(data);
           setLoading(false);
         }
       })
@@ -164,7 +170,7 @@ export function DetailDrawer({ orderId, onClose, cachedOrder }: DetailDrawerProp
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {loading && (
+          {loading && !order && (
             <div className="flex flex-col items-center justify-center h-64 gap-3 text-stone-400">
               <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
               <span className="text-sm">Fetching order record...</span>
@@ -178,7 +184,7 @@ export function DetailDrawer({ orderId, onClose, cachedOrder }: DetailDrawerProp
             </div>
           )}
 
-          {order && !loading && (
+          {order && (
             <>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
