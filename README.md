@@ -8,8 +8,7 @@ Built for the **Frontend Developer Assessment** (**Problem Statement 1: Can you 
 
 ## 🌐 Live Deployment & Demo Links
 
-- **Live Application URL**: [https://your-deployment-url.vercel.app](https://your-deployment-url.vercel.app) *(Replace with your live production URL)*
-- **Demo Video (5-min walk-through)**: [https://loom.com/your-demo-video](https://loom.com/your-demo-video) *(Replace with your walk-through video link)*
+- **Live Application URL**: [https://dare-ai-search-assessment.vercel.app/](https://dare-ai-search-assessment.vercel.app/)
 - **GitHub Repository**: [https://github.com/Abdul-Raheem324/DareAi-Search-Assessment](https://github.com/Abdul-Raheem324/DareAi-Search-Assessment)
 
 ---
@@ -177,7 +176,7 @@ npm run test
 ## 🤖 AI Usage Declaration
 
 In accordance with the assignment guidelines:
-- **Tools Used**: Claude / Antigravity AI assistant.
+- **Tools Used**: ChatGPT & claude to speed up research part
 - **How AI Was Directed**:
   - Pair-programming the architecture, sequence-token concurrency logic, and virtualized table integration.
   - Iterating on UI design and contrast improvements to replace dark themes with an accessible warm stone theme.
